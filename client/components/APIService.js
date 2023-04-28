@@ -27,10 +27,11 @@ export async function getActions (token) {
         "Authorization": `Bearer ${token}`
     }});
 
-    actions = await response.json();
+    let actions = await response.json();
     actions = JSON.parse(actions.message);
+    return actions;
+    
     actions = actions.filter(action => group._id === action.group);
-
     //PROBABLY RETURN actions ????
 
   } catch (err) {
@@ -76,8 +77,7 @@ export async function postUser (user) {
     });
 
     const data = await resp.json();
-    // if (data.message === "User already exists!") Alert.alert("User already exists!");
-    // if (data.message.includes('User succesfully created')) Alert.alert(`${firstName} ${lastName} user succesfully created!`);
+    return data;
 
   } catch (err) {
     throw new Error(err.message);
@@ -91,10 +91,11 @@ export async function getUsers (token) {
         "Authorization": `Bearer ${token}`
     }});
 
-    usersData = await response.json();
+    let usersData = await response.json();
     usersData = JSON.parse(usersData.message);
-    usersData = usersData.filter(user => group.members.includes(user._id));
+    return usersData;
 
+    usersData = usersData.filter(user => group.members.includes(user._id));
     //PROBABLY RETURN usersData ????
 
   } catch (err) {
@@ -139,6 +140,7 @@ export async function postChore (chore, token) {
     });
 
     const data = await resp.json();
+    return data;
     // if (data.message === 'Chore already exists!') Alert.alert('Chore already exists!');
     // if (data.message.includes('Chore succesfully created')) Alert.alert(`${taskName} task succesfully created!`);
 
