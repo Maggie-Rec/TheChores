@@ -13,8 +13,10 @@ export async function postAction (action, token) {
         body: JSON.stringify(action)
       });
 
-      const data = await resp.json();
-      // if (data.message.includes('Action succesfully saved')) Alert.alert("Chore succesfully added!");
+    const data = await resp.json();
+    return data;
+    // if (data.message.includes('Action succesfully saved')) Alert.alert("Chore succesfully added!");
+    
   } catch (err) {
     throw new Error(err.message);
   }
