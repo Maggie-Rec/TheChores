@@ -1,50 +1,72 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 import { handleAddTask, handleNewTask } from "./Navigation";
 import styles from '../App'
+import { getActions, getUsers } from "./APIService";
 
 export default function LeaderboardScreen() {
+
   const token = useSelector((state) => state.token);
   const group = useSelector((state) => state.group);
-  let [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    getUsers(token).then((usersList) => setUsers(usersList));
+    retrieveUsers(token).then((usersList) => setUsers(usersList));
   }, [isFocused, token]);
 
-  async function getUsers(token) {
+  async function retrieveUsers(token) {
     let usersData;
     let actions;
 
-    // We retrieve the users within the group
     try {
-      const response = await fetch("http://192.168.0.25:3001/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
 
-      usersData = await response.json();
-      usersData = JSON.parse(usersData.message);
+      usersData = await getUsers(token);
       usersData = usersData.filter((user) => group.members.includes(user._id));
+
+    } catch (err) {
+      throw new Error(err.message);
+    }
+
+    // We retrieve the users within the group
+    // try {
+    //   const response = await fetch("http://192.168.0.25:3001/users", {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
+
+    //   usersData = await response.json();
+    //   usersData = JSON.parse(usersData.message);
+    //   usersData = usersData.filter((user) => group.members.includes(user._id));
+    // } catch (err) {
+    //   throw new Error(err.message);
+    // }
+
+    try {
+
+      actions = await getActions(token);
+      actions = actions.filter((action) => group._id === action.group);
+
     } catch (err) {
       throw new Error(err.message);
     }
 
     // We retrieve actions within the group
-    try {
-      const response = await fetch("http://192.168.0.25:3001/actions", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    // try {
+    //   const response = await fetch("http://192.168.0.25:3001/actions", {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
 
-      actions = await response.json();
-      actions = JSON.parse(actions.message);
-      actions = actions.filter((action) => group._id === action.group);
-    } catch (err) {
-      throw new Error(err.message);
-    }
+    //   actions = await response.json();
+    //   actions = JSON.parse(actions.message);
+    //   actions = actions.filter((action) => group._id === action.group);
+    // } catch (err) {
+    //   throw new Error(err.message);
+    // }
 
     // We calculate the score for each user
     for (let i = 0; i < usersData.length; i++) {
