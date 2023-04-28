@@ -141,6 +141,7 @@ export async function postChore (chore, token) {
     });
 
     const data = await resp.json();
+    return data;
     // if (data.message === 'Chore already exists!') Alert.alert('Chore already exists!');
     // if (data.message.includes('Chore succesfully created')) Alert.alert(`${taskName} task succesfully created!`);
 
