@@ -1,7 +1,12 @@
 import { useState } from "react";
+import { Alert } from "react-native";
 import { handleLogin } from "./Navigation";
 import styles from "../App";
+import { postUser } from "./APIService";
+
+
 export default function RegisterScreen() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -17,15 +22,18 @@ export default function RegisterScreen() {
 
     // Add new user to MongoDB
     try {
-      const resp = await fetch("http://192.168.0.25:3001/user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
+      // const resp = await fetch("http://192.168.0.25:3001/user", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(user),
+      // });
 
-      const data = await resp.json();
+      // const data = await resp.json();
+
+      const data = await postUser(user);
+
       if (data.message === "User already exists!")
         Alert.alert("User already exists!");
       if (data.message.includes("User succesfully created"))
