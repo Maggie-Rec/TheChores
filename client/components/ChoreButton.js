@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Alert } from "react-native";
 import { postAction } from "./APIService";
 
-function ChoreButton({ title, value = 0 }) {
+export default function ChoreButton({ title, value = 0 }) {
 
   const token = useSelector((state) => state.token);
   const group = useSelector((state) => state.group);
