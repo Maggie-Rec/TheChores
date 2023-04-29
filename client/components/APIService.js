@@ -131,3 +131,24 @@ export async function getGroups(token) {
      throw new Error(err);
    }
 }
+      
+ export async function addGroup(token, groupName) {
+
+  try {
+    const resp = await fetch(`${ROOT_URL}/group/member`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: groupName }),
+    }).then(res => res.json());
+   
+    return resp;
+      
+    } catch (err) {
+      Alert.alert("Error", err.message);
+    }
+  }
+
+  
